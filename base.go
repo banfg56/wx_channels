@@ -25,6 +25,14 @@ type _wxBase struct { //基类
 	AppLog       *log.Helper
 }
 
+func getStrMax(s string, maxLenth int) string {
+	if len(s) > 100 {
+		return s[0:100]
+	} else {
+		return s
+	}
+}
+
 func (b *_wxBase) GetUADefault() string {
 	if len(b.Ua) > 0 {
 		return b.Ua

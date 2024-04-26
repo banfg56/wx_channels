@@ -244,7 +244,7 @@ func (r *WxChannelLiveAdmin) LoginAccount(cs []*http.Cookie) (err error) {
 		SetSuccessResult(&jAuth).
 		Post(fmt.Sprintf("%s%s", WX_VIDEO_ADMIN_HOST, `/cgi-bin/mmfinderassistant-bin/auth/auth_data`))
 	if respErr != nil {
-		err = fmt.Errorf("cookie请求authData异常,%s, 错误数据:%s ", respErr.Error(), resp.String()[0:100])
+		err = fmt.Errorf("cookie请求authData异常,%s, 错误数据:%s ", respErr.Error(), getStrMax(resp.String(), 100))
 		return
 	}
 
@@ -275,7 +275,7 @@ func (r *WxChannelLiveAdmin) LoginAccount(cs []*http.Cookie) (err error) {
 		SetSuccessResult(&jAuth).
 		Post(fmt.Sprintf("%s%s", WX_VIDEO_ADMIN_HOST, `/cgi-bin/mmfinderassistant-bin/helper/helper_upload_params`))
 	if respErr != nil {
-		err = fmt.Errorf("cookie请求helper_upload_params异常,%s, 错误数据:%s ", respErr.Error(), resp.String()[0:100])
+		err = fmt.Errorf("cookie请求helper_upload_params异常,%s, 错误数据:%s ", respErr.Error(), getStrMax(resp.String(), 100))
 		return
 	} else if jAuth.Code != 0 {
 		err = fmt.Errorf("获取视频号ID异常,code:%d msg:%s", jAuth.Code, jAuth.Msg)
@@ -310,7 +310,7 @@ func (r *WxChannelLiveAdmin) GetLiveReplayList(req ReqLiveReplayList) (livePlays
 		Post(fmt.Sprintf("%s%s", WX_VIDEO_ADMIN_HOST, WX_VIDEO_ADMIN_URI_REPLAY_LIST))
 
 	if respErr != nil {
-		err = fmt.Errorf("请求异常,%s, 错误数据:%s ", respErr, resp.String()[0:100])
+		err = fmt.Errorf("请求异常,%s, 错误数据:%s ", respErr, getStrMax(resp.String(), 100))
 	} else {
 		if jres.Code == 0 {
 			var playResp RespLiveReplayList
@@ -346,7 +346,8 @@ func (r *WxChannelLiveAdmin) GetLiveReplayInfo(req ReqLivePlayInfo) (info RespLi
 		Post(fmt.Sprintf("%s%s", WX_VIDEO_ADMIN_HOST, WX_VIDEO_ADMIN_URI_REPLAY_FRAGMENT))
 
 	if respErr != nil {
-		err = fmt.Errorf("请求异常,%s, 错误数据:%s ", respErr, resp.String()[0:100])
+		err = fmt.Errorf("请求异常,%s, 错误数据:%s ", respErr, getStrMax(resp.String(), 100))
+
 	} else {
 		if jres.Code == 0 {
 			var playResp RespLivePlayInfo
@@ -382,7 +383,8 @@ func (r *WxChannelLiveAdmin) GetLiveHistory(req ReqLiveHistoryList) (res []RespL
 		Post(fmt.Sprintf("%s%s", WX_VIDEO_ADMIN_HOST, WX_VIDEO_ADMIN_URI_LIVE_HISTORY))
 
 	if respErr != nil {
-		err = fmt.Errorf("请求异常,%s, 错误数据:%s ", respErr, resp.String()[0:100])
+		err = fmt.Errorf("请求异常,%s, 错误数据:%s ", respErr, getStrMax(resp.String(), 100))
+
 	} else {
 		if jres.Code == 0 {
 			var historyList RespLiveHistoryList
