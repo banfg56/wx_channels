@@ -357,7 +357,7 @@ func (r *WxChannelLiveAdmin) GetLiveReplayInfo(req ReqLivePlayInfo) (info RespLi
 			} else {
 				info = playResp
 				//增加校验
-				if len(info.ReplayUri) == 0 {
+				if len(info.ReplayUri) == 0 && len(info.HlsUri) == 0 {
 					err = fmt.Errorf("回放片段为空")
 				}
 			}
