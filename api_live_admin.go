@@ -27,11 +27,13 @@ type WxChannelLiveAdmin struct {
 }
 
 type WxLiveAccount struct {
-	Uid            string // finderUsername,长字符串
-	Nickname       string
-	Avatar         string
-	XAuthHeaderUin string //登录人微信账号ID
-	UniqId         string //视频号ID,后台可见
+	Uid             string // finderUsername,长字符串
+	Nickname        string
+	Avatar          string
+	XAuthHeaderUin  string //登录人微信账号ID
+	UniqId          string //视频号ID,后台可见
+	FansCount       int64  //粉丝数
+	AuthCompanyName string //认证公司名
 }
 
 type ReqPage struct {
@@ -230,12 +232,13 @@ func (r *WxChannelLiveAdmin) LoginAccount(cs []*http.Cookie) (err error) {
 	}
 	type _respAuthData struct {
 		FindUser struct {
-			NickName       string `json:"nickname"`       // 昵称
-			Avatar         string `json:"headImgUrl"`     // 头像
-			UidStr         string `json:"uniqId"`         // 视频号ID
-			FinderUsername string `json:"finderUserName"` // 微信号
-			FansCount      int32  `json:"fansCount"`      // 粉丝数
-			FeedsCount     int32  `json:"feedsCount"`     // 动态数
+			NickName        string `json:"nickname"`        // 昵称
+			Avatar          string `json:"headImgUrl"`      // 头像
+			UidStr          string `json:"uniqId"`          // 视频号ID
+			FinderUsername  string `json:"finderUserName"`  // 微信号
+			FansCount       int32  `json:"fansCount"`       // 粉丝数
+			FeedsCount      int32  `json:"feedsCount"`      // 动态数
+			AuthCompanyName string `json:"authCompanyName"` // 公司名称
 		} `json:"finderUser"`
 	}
 	reqAuth := _reqAuthData{TimestampUixMilli: fmt.Sprintf("%d", time.Now().UnixMilli()), ReqScene: WX_ADMIN_SCENE_DEFAULT, Scene: WX_ADMIN_SCENE_DEFAULT}
@@ -261,6 +264,8 @@ func (r *WxChannelLiveAdmin) LoginAccount(cs []*http.Cookie) (err error) {
 	r.account.Avatar = authResp.FindUser.Avatar
 	r.account.Uid = authResp.FindUser.FinderUsername
 	r.account.UniqId = authResp.FindUser.UidStr
+	r.account.FansCount = int64(authResp.FindUser.FansCount)
+	r.account.AuthCompanyName = authResp.FindUser.AuthCompanyName
 
 	// 获取uin /cgi-bin/mmfinderassistant-bin/helper/helper_upload_params
 	reqAuth.TimestampUixMilli = fmt.Sprintf("%d", time.Now().UnixMilli())
